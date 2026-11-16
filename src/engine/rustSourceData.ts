@@ -132,4 +132,48 @@ impl VoxelEngineWasm {
     pub non_air_count: u16,
 }`,
   },
+  {
+    step: 'Step 1: Project & Mod Manifests',
+    path: '.github/workflows/deploy-pages.yml',
+    language: 'toml',
+    description: 'GitHub Pages automatic static build & deployment workflow (relative base: "./" + .nojekyll + 404.html).',
+    code: `name: Deploy VoxelCraft 26.3 to GitHub Pages
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm install
+      - run: |
+          npm run build
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4`,
+  },
 ];

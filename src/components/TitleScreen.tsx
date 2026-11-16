@@ -171,9 +171,9 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({
       {/* Top Bar: Zero-Chunk 4GB RAM Standby Proof & Quick Architecture Button */}
       <div className="w-full max-w-5xl flex items-center justify-between gap-4 text-xs text-slate-200 font-mono-tabular">
         <div className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
-          <span>Minecraft Java 26.3 (Wilderness Bound)</span>
+          <span>Minecraft Java 26.3</span>
           <span className="mx-2" aria-hidden="true">·</span>
-          <span>Rust/WASM 16-bit Palette Engine</span>
+          <span>GitHub Pages Static (`./`)</span>
           <span className="mx-2" aria-hidden="true">·</span>
           <span className="text-emerald-300">
             Title Standby Chunks: {loadedChunkCount} (4GB RAM Safe)
@@ -184,7 +184,7 @@ export const TitleScreen: React.FC<TitleScreenProps> = ({
           onClick={() => setSubScreen('rust_mod_studio')}
           className="mc-btn px-3.5 py-1.5 text-xs font-pixel whitespace-nowrap shrink-0"
         >
-          Step 1 &amp; 2 Rust / Mod Code
+          Rust / Mod / GitHub Pages
         </button>
       </div>
 

@@ -205,6 +205,32 @@ export default function App() {
 
   useEffect(() => {
     setAllBlocks(Array.from(engineRef.current.blocksByNum.values()));
+    // Fetch ./mods/index.json via relative path so GitHub Pages project subpaths (/<repo>/) work seamlessly
+    fetch('./mods/index.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then(async (manifest) => {
+        if (!manifest?.mods) return;
+        for (const mod of manifest.mods) {
+          if (mod.enabled && Array.isArray(mod.blocks)) {
+            for (const blockPath of mod.blocks) {
+              const relPath = blockPath.startsWith('/') ? `.${blockPath}` : blockPath;
+              const res = await fetch(relPath).catch(() => null);
+              if (res && res.ok) {
+                const text = await res.text();
+                try {
+                  engineRef.current.registerCustomModJson(text);
+                } catch {
+                  // Ignore invalid custom block json
+                }
+              }
+            }
+          }
+        }
+        setAllBlocks(Array.from(engineRef.current.blocksByNum.values()));
+      })
+      .catch(() => {
+        // Offline or file:// fallback uses pre-registered ModRegistry blocks
+      });
   }, []);
 
   const showToast = useCallback((msg: string) => {
